@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Currency Converter — Transparent, All-In Rates</title>
+  <meta name="description" content="Convert EUR to USD with mid-market and provider rates. See true all-in outcomes, compare providers, and share or embed any result."/>
+  <link id="canonical" rel="canonical" href="/" />
+  <meta name="theme-color" content="#0a3d91"/>
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Currency Converter — Transparent, All-In Rates"/>
+  <meta property="og:description" content="Mid vs provider rates, true all-in outcome, and shareable state."/>
+  <meta property="og:type" content="website"/>
+
+  <link rel="stylesheet" href="styles.css"/>
+  <script id="ldjson" type="application/ld+json">{}</script>
+</head>
+<body>
+  <header class="site-header" id="site-header">
+    <div class="brand">🌐 Prime Exchange</div>
+    <p class="strap">Transparent consumer currency exchange — no hype, just the truth</p>
+  </header>
+
+  <main class="container">
+    <!-- Crown-Jewel Converter -->
+    <section class="card converter" aria-labelledby="title">
+      <h1 id="title" class="page-title">EUR to USD — Convert Euros to US Dollars</h1>
+
+      <!-- Dominant output -->
+      <h2 id="headline" class="headline" aria-live="polite">100 EUR = — USD</h2>
+
+      <!-- Quick amount chips -->
+      <div class="chips" aria-label="Quick amounts">
+        <button class="chip-btn" data-amt="50">+50</button>
+        <button class="chip-btn" data-amt="100">+100</button>
+        <button class="chip-btn" data-amt="500">+500</button>
+        <button class="chip-btn" data-amt="1000">+1k</button>
+        <button class="chip-btn" data-amt="5000">+5k</button>
+      </div>
+
+      <div class="grid grid-2 gap">
+        <div class="field">
+          <label for="amount">Amount</label>
+          <input id="amount" type="number" inputmode="decimal" value="100" min="0" step="0.01" aria-describedby="amt-help"/>
+          <div id="amt-help" class="assistive">Enter the amount to convert</div>
+          <div class="slider-wrap">
+            <input id="amountSlider" type="range" min="10" max="50000" value="100" aria-label="Adjust amount range"/>
+            <div class="slider-ticks"><span>10</span><span>1k</span><span>10k</span><span>50k</span></div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="mini">From</label>
+          <select id="from" aria-label="From currency">
+            <option value="EUR" selected>🇪🇺 EUR — Euro</option>
+            <option value="USD">🇺🇸 USD — US Dollar</option>
+            <option value="GBP">🇬🇧 GBP — British Pound</option>
+            <option value="JPY">🇯🇵 JPY — Japanese Yen</option>
+            <option value="CAD">🇨🇦 CAD — Canadian Dollar</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label class="mini">To</label>
+          <select id="to" aria-label="To currency">
+            <option value="USD" selected>🇺🇸 USD — US Dollar</option>
+            <option value="EUR">🇪🇺 EUR — Euro</option>
+            <option value="GBP">🇬🇧 GBP — British Pound</option>
+            <option value="JPY">🇯🇵 JPY — Japanese Yen</option>
+            <option value="CAD">🇨🇦 CAD — Canadian Dollar</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label class="mini">&nbsp;</label>
+          <button id="swap" class="btn-secondary" aria-label="Swap currencies (shortcut S)">⇄ Swap</button>
+        </div>
+      </div>
+
+      <!-- Quick pair chips -->
+      <div class="chips alt" aria-label="Common corridors">
+        <button class="chip-btn pair" data-from="EUR" data-to="USD">EUR→USD</button>
+        <button class="chip-btn pair" data-from="GBP" data-to="USD">GBP→USD</button>
+        <button class="chip-btn pair" data-from="JPY" data-to="USD">JPY→USD</button>
+        <button class="chip-btn pair" data-from="CAD" data-to="USD">CAD→USD</button>
+      </div>
+
+      <div class="grid grid-2 gap">
+        <button id="convert" class="btn-primary" aria-label="Convert (Enter)">Convert</button>
+        <div class="share-row">
+          <button id="copyResult" class="btn-ghost" aria-label="Copy numeric result">Copy Result</button>
+          <button id="copyLink" class="btn-ghost" aria-label="Copy link to this result">Copy Link</button>
+          <button id="copyEmbed" class="btn-ghost" aria-label="Copy embed code">Copy Embed</button>
+        </div>
+      </div>
+
+      <!-- Reciprocal + Trust Surface + Sparkline + Fair meter -->
+      <div class="results">
+        <p id="lineA" class="subrate">1 EUR = — USD</p>
+        <p id="lineB" class="subrate">1 USD = — EUR</p>
+
+        <div class="trust grid grid-4">
+          <div class="chip">Interbank: <strong id="interbank">—</strong></div>
+          <div class="chip">Broker: <strong id="broker">—</strong></div>
+          <div class="chip">Spread: <strong id="spread">—</strong></div>
+          <div class="chip">Precision: <strong id="prec">4 dp</strong></div>
+        </div>
+
+        <div class="insights">
+          <canvas id="spark" width="260" height="40" aria-label="30-day mid-rate sparkline"></canvas>
+          <span id="fair" class="fair-badge">Fair? —</span>
+        </div>
+
+        <p class="timestamp">
+          <span class="badge" id="rateType">Rate type: Interbank (mid)</span> •
+          Updated <span id="time">—:—:—</span> GMT •
+          Source: Prime Interbank (mock) • Method: mid = (bid+ask)/2
+        </p>
+      </div>
+    </section>
+
+    <!-- Tabs: Providers / Tools / Guidance -->
+    <section class="tabs card">
+      <div class="tab-row" role="tablist" aria-label="More options">
+        <button class="tab active" role="tab" aria-selected="true" aria-controls="tab-providers">Providers</button>
+        <button class="tab" role="tab" aria-selected="false" aria-controls="tab-tools">Tools</button>
+        <button class="tab" role="tab" aria-selected="false" aria-controls="tab-guidance">Guidance</button>
+      </div>
+
+      <!-- Providers -->
+      <div id="tab-providers" class="tab-panel active" role="tabpanel">
+        <div class="filters">
+          <div class="filter-group">
+            <label class="mini">Arrival speed</label>
+            <select id="speedFilter">
+              <option value="any">Any</option>
+              <option value="instant">Instant/Today</option>
+              <option value="oneday">1–2 days</option>
+            </select>
+          </div>
+        </div>
+
+        <p class="note">Ranked by <strong>amount received</strong> after fees for this corridor.</p>
+        <div class="table" role="table" aria-label="Provider comparison">
+          <div class="row header" role="row">
+            <span role="columnheader">Provider</span>
+            <span role="columnheader">Rate</span>
+            <span role="columnheader">Fee</span>
+            <span role="columnheader">Total Received</span>
+            <span role="columnheader">ETA</span>
+          </div>
+          <div id="wise" class="row" role="row"><span>Wise</span><span>—</span><span>—</span><span>—</span><span>—</span></div>
+          <div id="revolut" class="row" role="row"><span>Revolut</span><span>—</span><span>—</span><span>—</span><span>—</span></div>
+          <div id="western" class="row" role="row"><span>Western Union</span><span>—</span><span>—</span><span>—</span><span>—</span></div>
+          <div id="moneygram" class="row" role="row"><span>MoneyGram</span><span>—</span><span>—</span><span>—</span><span>—</span></div>
+          <div id="remitly" class="row" role="row"><span>Remitly</span><span>—</span><span>—</span><span>—</span><span>—</span></div>
+          <div id="xoom" class="row" role="row"><span>Xoom (PayPal)</span><span>—</span><span>—</span><span>—</span><span>—</span></div>
+          <div id="ofx" class="row" role="row"><span>OFX</span><span>—</span><span>—</span><span>—</span><span>—</span></div>
+          <div id="worldremit" class="row" role="row"><span>WorldRemit</span><span>—</span><span>—</span><span>—</span><span>—</span></div>
+        </div>
+      </div>
+
+      <!-- Tools -->
+      <div id="tab-tools" class="tab-panel" role="tabpanel">
+        <div class="tools">
+          <div class="tool-card">
+            <h4>Trip Budget Mini</h4>
+            <div class="grid grid-3 gap">
+              <input id="days" type="number" min="1" value="5" aria-label="Trip days"/>
+              <input id="daily" type="number" min="0" value="120" aria-label="Daily spend in destination currency"/>
+              <button id="calcTrip" class="btn-secondary">Estimate</button>
+            </div>
+            <p class="note" id="tripOut">Estimated total: —</p>
+          </div>
+
+          <div class="tool-card">
+            <h4>Multi-Hop Penalty</h4>
+            <p class="note">Estimate cost of A→B→C vs direct A→C (illustrative).</p>
+            <button id="calcHop" class="btn-secondary">Estimate Penalty</button>
+            <p class="note" id="hopOut">Penalty: —</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Guidance -->
+      <div id="tab-guidance" class="tab-panel" role="tabpanel">
+        <ul class="guidance">
+          <li>💡 Airport cash spreads are usually worst. Compare city pickup or card FX instead.</li>
+          <li>🧾 Always check <em>all-in</em> outcome: rate − fee − surcharges.</li>
+          <li>🔒 If offered, lock your rate briefly to avoid surprises.</li>
+          <li>🕒 Arrival matters: “Today” vs “1–2 days” can change who’s best.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="disclaimer">
+      Rates are indicative and for information only. Not a trading platform. Fees and arrival times vary by provider and corridor.
+    </section>
+  </main>
+
+  <footer class="site-footer" id="site-footer">
+    © 2025 Prime Exchange • Built for clarity, speed, and transparency
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
